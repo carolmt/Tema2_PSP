@@ -13,12 +13,11 @@ public class Servidor {
     public static String devolverLaHora(String hora){
 
         String textoHora;
-        if(hora == "time") {
+        if(hora.equals("time")) {
             DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-            textoHora = dateFormat.format(hora);
-        }
-        else {
-            textoHora = "No se ha envíado el mensaje 'time'. ";
+            textoHora = dateFormat.format(new Date());
+        } else {
+            textoHora = "No se ha enviado el mensaje 'time'. ";
         }
         return textoHora;
     }
@@ -37,20 +36,16 @@ public class Servidor {
         while (true){
             Socket conexion=socketEscucha.accept();
             System.out.println("Conexion recibida! " );
-            InputStream is=conexion.getInputStream();
-
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader bf = new BufferedReader(isr);
-
+            BufferedReader bf = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
             String hora = bf.readLine();
-
             String resul = devolverLaHora(hora);
 
-            OutputStream os=conexion.getOutputStream();
-            PrintWriter pw=new PrintWriter(os);
-            pw.write(resul);
+            PrintWriter pw = new PrintWriter(conexion.getOutputStream());
+            pw.println(resul);
             pw.flush();
-            System.out.println("La hora actual es: " + resul );
+
+            System.out.println("La hora actual es: " + resul);
+            conexion.close();
         }
     }
     public  static void main(String[] args) throws IOException {

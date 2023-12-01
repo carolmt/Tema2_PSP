@@ -16,15 +16,16 @@ public class Cliente {
         try {
             Socket socket = new Socket();
             socket.connect(direccion);
-            BufferedReader bfr = Cliente.getFlujo(socket.getInputStream());
             PrintWriter pw = new PrintWriter(socket.getOutputStream());
+            pw.println("time");
+            pw.flush();
+            socket.shutdownOutput();
 
-            pw.print("time");
-            //pw.flush();
-
+            BufferedReader bfr = getFlujo(socket.getInputStream());
             String resultado = bfr.readLine();
-            System.out.println
-                    ("La hora actual es:" + resultado);
+            System.out.println("La hora actual es: " + resultado);
+
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
