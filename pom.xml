@@ -11,6 +11,8 @@
     <module>Ejemplo1</module>
       <module>Ejer1_servidor</module>
     <module>Ejer1_cliente</module>
+    <module>Ejer2_Servidor</module>
+      <module>Ejer2_Cliente</module>
   </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
