@@ -9,28 +9,28 @@ public class Cliente {
     public static final int PORT = 3000;
 
     public static void main(String[] args) throws IOException {
-        Socket clientSocket = null;
+        Socket socket = null;
         BufferedReader input = null;
         PrintWriter output = null;
-        Scanner scanner = new Scanner(System.in);
+        Scanner reader = new Scanner(System.in);
 
         try {
-            clientSocket=new Socket("localhost",PORT);
-            input=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            output=new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())),true);
+            socket=new Socket("localhost",PORT);
+            input=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output=new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
         } catch (IOException e) {
             System.err.println("No se ha podido conectar al socket");
             System.exit(-1);
         }
 
-        System.out.println("Escribe un mensaje:");
-        String message = scanner.nextLine();
-        String messageBase64= String.format("#%s#", Base64.getEncoder().encodeToString(message.getBytes()));
-        output.println(messageBase64);
+        System.out.println("Introduce un mensaje:");
+        String mensaje = reader.nextLine();
+        String mensajeEnB64= String.format(Base64.getEncoder().encodeToString(mensaje.getBytes()));
+        output.println(mensajeEnB64);
 
 
         output.close();
         input.close();
-        clientSocket.close();
+        socket.close();
     }
 }

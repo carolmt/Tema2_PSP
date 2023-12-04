@@ -17,27 +17,28 @@ public class Servidor {
     public static final int PORT = 3000;
     public static final String FILEPATH = "messages.txt";
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = null;
+        ServerSocket socket = null;
         try {
-            serverSocket = new ServerSocket(PORT);
+            socket = new ServerSocket(PORT);
         } catch (IOException e) {
             System.out.println("No se puede conectar el socket: " + PORT);
             System.exit(-1);
         }
         Socket clientSocket;
         BufferedReader input;
-        System.out.println("Escuchando por el puerto: " + serverSocket);
+
         while (true) {
             try {
-                clientSocket = serverSocket.accept();
+                clientSocket = socket.accept();
                 input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String messageBase64 = input.readLine();
-                if (messageBase64.charAt(0) == messageBase64.charAt(messageBase64.length() - 1) && messageBase64.charAt(0) == '#') {
-                    messageBase64 = messageBase64.replace("#", "");
-                    String message = new String(Base64.getDecoder().decode(messageBase64));
+                String mensajeEnB64 = input.readLine();
+                if (mensajeEnB64.charAt(0) == mensajeEnB64.charAt(mensajeEnB64.length() - 1) && mensajeEnB64.charAt(0) == '#') {
+                    mensajeEnB64 = mensajeEnB64.replace("#", "");
+                    String mensaje = new String(Base64.getDecoder().decode(mensajeEnB64));
                     Path filename = Path.of(".", FILEPATH);
+
                     try (BufferedWriter bw = Files.newBufferedWriter(filename, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-                        bw.write(message);
+                        bw.write(mensaje);
                         bw.newLine();
                     } catch (IOException e) {
                         e.printStackTrace();
